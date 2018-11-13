@@ -287,3 +287,13 @@ float Functions::getYMax() { return yMax; }
 char Functions::getAuxiliarBorda() { return auxiliarBorda; }
 
 std::list<b2Body*> Functions::getList() { return bolas; }
+
+void Functions::setBolaAtiravel(b2Body * _bolaAtiravel)
+{
+	bolaAtiravel = _bolaAtiravel;
+}
+
+b2Body * Functions::getBolaAtiravel()
+{
+	return bolaAtiravel;
+}

@@ -44,6 +44,8 @@ public:
 	b2Body* getLinhaBaixo();
 	void setLinhaBaixo(b2Body* linhaCima);
 	std::list<b2Body*> getList();
+	void setBolaAtiravel(b2Body* bolaAtiravel);
+	b2Body* getBolaAtiravel();
 
 #pragma endregion
 
@@ -60,4 +62,5 @@ private:
 	b2Body* linhaBaixo;
 	char auxiliarBorda;
 	std::list<b2Body*> bolas;
+	b2Body* bolaAtiravel;
 };

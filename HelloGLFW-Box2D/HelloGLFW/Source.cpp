@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ctime>
 #include <stdlib.h>
+#include <chrono>
 #include "Functions.h"
 #include "MatVet.h"
 #include "QueryCallback.h"
@@ -25,18 +26,10 @@ static void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
 	glfwGetCursorPos(window, &x, &y);
 	b2Vec2 p = func.ConvertScreenToWorld(window, x, y);
 
-	func.setMouseWorld(p);
-
-	if (func.getMouseJoint())
-	{
-		func.getMouseJoint()->SetTarget(p);
-	}
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
-
-
 	if (button == GLFW_MOUSE_BUTTON_LEFT)
 	{
 		double x, y;
@@ -45,44 +38,14 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 
 		if (action == GLFW_PRESS)
 		{
-			func.setMouseWorld(p); //ainda nao sei se precisa
+			//TODO: line that shows the target? Those thingies?
 
-			if (func.getMouseJoint() != NULL)
-			{
-				return;
-			}
-
-			// Make a small box.
-			b2AABB aabb;
-			b2Vec2 d;
-			d.Set(0.001f, 0.001f);
-			aabb.lowerBound = p - d;
-			aabb.upperBound = p + d;
-
-			// Query the world for overlapping shapes.
-			QueryCallback callback(p);
-			b2World *w = func.getWorld();
-			w->QueryAABB(&callback, aabb);
-
-			if (callback.m_fixture)
-			{
-				b2Body* body = callback.m_fixture->GetBody();
-				b2MouseJointDef md;
-				md.bodyA = func.getLinhaBaixo();
-				md.bodyB = body;
-				md.target = p;
-				md.maxForce = 1000.0f * body->GetMass();
-				md.dampingRatio = 1.0;
-				md.collideConnected = true;
-				func.setMouseJoint((b2MouseJoint*)func.getWorld()->CreateJoint(&md));
-				body->SetAwake(true);
-			}
 		}
 		if (action == GLFW_RELEASE)
 		{
-			if (func.getMouseJoint())
-				func.getWorld()->DestroyJoint(func.getMouseJoint());
-			func.setMouseJoint(NULL);
+			//TODO: throw the damn ball
+			//as in: add physics to it, and move it to where the mouse is
+			//add it to the array of bubbles and create new bubble
 		}
 	}
 }
@@ -99,7 +62,7 @@ int main() {
 	func.setTimeStep(1.0 / 60.0);
 	func.setPositionIterations(6);
 	func.setVelocityIterations(8);
-	int width = 640, height = 480;
+	int width = 480, height = 640;
 
 	int ang = 45, newtons = 10000;
 
@@ -117,7 +80,7 @@ int main() {
 		exit(EXIT_FAILURE);
 
 	//Criando a janela
-	window = glfwCreateWindow(width, height, "Exercicios 1", NULL, NULL);
+	window = glfwCreateWindow(width, height, "Boba Tea Bubble Shoot", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -133,7 +96,7 @@ int main() {
 	glfwSetMouseButtonCallback(window, mouse_button_callback);
 	glfwSetCursorPosCallback(window, cursor_pos_callback);
 
-
+	//Criando as bordas da tela e do copo
 	b2Body *linhaBaixo, *linhaEsq, *linhaDir;
 
 	func.setLinhaBaixo(func.createEdge(func.getWorld(), 0, -54, b2Vec2(-50, 15), b2Vec2(50, 15), 2, 2, 0));
@@ -149,7 +112,7 @@ int main() {
 	bordaDir = func.createEdge(func.getWorld(), 30, -55, b2Vec2(-20, 20), b2Vec2(-15, 60), 1, 1, 1);
 	bordaBaixo = func.createEdge(func.getWorld(), 0, -55, b2Vec2(-15, 20), b2Vec2(10, 20), 1, 1, 1);
 
-
+	//Criando as bolas e setando o userData delas (usado pra setar a cor)
 	int cont = 1, posX = 5;
 
 	for (int i = 0; i < 25; i++) {
@@ -165,6 +128,10 @@ int main() {
 	}
 
 	b2Body* bolaPrincipal = func.createMainBubble();
+	//0x, 30y
+	b2Body* bolaAtiravel = func.createCircle(func.getWorld(), 10, 10, 2.5, 1, 0.3, 0.5);
+	bolaAtiravel->SetGravityScale(0);
+	func.set
 
 	while (!glfwWindowShouldClose(window)) //loop da aplica��o :)
 	{
@@ -195,9 +162,9 @@ int main() {
 			gluOrtho2D(func.getXMin(), func.getXMax(), func.getYMin()*ratio, func.getYMax()*ratio);
 		}
 
-		if (func.getList().size < 8){
-			func.JogarBolinhas();
-		}
+		//if (func.getList().size < 8){
+		//	func.JogarBolinhas();
+		//}
 
 		//Setando a matriz de modelo, para mandar desenhar as primitivas
 		glMatrixMode(GL_MODELVIEW);

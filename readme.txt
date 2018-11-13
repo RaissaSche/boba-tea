@@ -7,3 +7,8 @@ C/C++:  E:\Exercicios-1\Box2D-lib
 
 Vinculador: E:\Exercicios-1\Box2D-lib\lib
 	    E:\Exercicios-1\GLFW-3.1.2-lib\lib
+
+References:
+http://www.cplusplus.com/reference/chrono/
+https://www.freetype.org/
+http://box2d.org/manual.pdf
