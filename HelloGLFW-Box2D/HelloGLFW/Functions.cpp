@@ -3,6 +3,11 @@
 
 Functions::Functions() {
 	auxiliarBorda = 'b';
+	pressionou = false;
+	xMin = -40.0;
+	xMax = 40.0;
+	yMin = -40.0;
+	yMax = 40.0; //ortho2D
 }
 Functions::~Functions() {}
 
@@ -100,6 +105,12 @@ void Functions::Render(b2World *world, DebugDraw renderer)
 	green.r = 0.462;
 	green.g = 0.756;
 	green.b = 0.462;
+
+
+	if (pressionou)
+	{
+		desenharMira();
+	}
 
 	char userData;
 	//PERCORRE A LISTA DE CORPOS R�GIDOS DO MUNDO E CHAMA A ROTINA DE DESENHO PARA A LISTA DE FIXTURES DE CADA UM
@@ -263,6 +274,15 @@ void Functions::JogarBolinhas(){
 	}
 }
 
+void Functions::desenharMira()
+{
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glBegin(GL_LINES);
+	glVertex2i(posicaoMouse.x, posicaoMouse.y);
+	glVertex2i(bolaAtiravel->GetWorldCenter().x, bolaAtiravel->GetWorldCenter().y);
+	glEnd();
+}
+
 b2World* Functions::getWorld() { return world; }
 void Functions::setWorld(b2World * world) { this->world = world; }
 
@@ -296,4 +316,24 @@ void Functions::setBolaAtiravel(b2Body * _bolaAtiravel)
 b2Body * Functions::getBolaAtiravel()
 {
 	return bolaAtiravel;
+}
+
+void Functions::setPosicaoMouse(b2Vec2 posicaoMouse)
+{
+	this->posicaoMouse = posicaoMouse;
+}
+
+b2Vec2 Functions::getPosicaoMouse()
+{
+	return posicaoMouse;
+}
+
+void Functions::setPressionou(bool pressionou)
+{
+	this->pressionou = pressionou;
+}
+
+bool Functions::getPressionou()
+{
+	return pressionou;
 }

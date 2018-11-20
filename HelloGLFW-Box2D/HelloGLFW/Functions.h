@@ -22,6 +22,7 @@ public:
 	b2Body* createMainBubble();
 	void BeginContact(b2Contact* contact);
 	void JogarBolinhas();
+	void desenharMira();
 
 #pragma region GETs e SETs
 
@@ -46,6 +47,10 @@ public:
 	std::list<b2Body*> getList();
 	void setBolaAtiravel(b2Body* bolaAtiravel);
 	b2Body* getBolaAtiravel();
+	void setPosicaoMouse(b2Vec2 posicaoMouse);
+	b2Vec2 getPosicaoMouse();
+	void setPressionou(bool pressionou);
+	bool getPressionou();
 
 #pragma endregion
 
@@ -54,7 +59,7 @@ private:
 	float32 timeStep;
 	int32 velocityIterations;
 	int32 positionIterations;
-	float xMin = -40.0, xMax = 40.0, yMin = -40.0, yMax = 40.0; //ortho2D
+	float xMin, xMax, yMin, yMax; //ortho2D
 	DebugDraw d;
 	b2World *world;
 	b2Vec2 mouseWorld;
@@ -63,4 +68,6 @@ private:
 	char auxiliarBorda;
 	std::list<b2Body*> bolas;
 	b2Body* bolaAtiravel;
+	b2Vec2 posicaoMouse;
+	bool pressionou;
 };

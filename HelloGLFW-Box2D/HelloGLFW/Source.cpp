@@ -4,9 +4,12 @@
 #include <chrono>
 #include "Functions.h"
 #include "MatVet.h"
+#include <glm/glm.hpp>
 #include "QueryCallback.h"
 
 Functions func;
+
+bool pressionou = false;
 
 //Callback de erro - PADR�O DA GLFW - n�o precisa mexer
 static void error_callback(int error, const char* description)
@@ -25,7 +28,7 @@ static void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
 	double x, y;
 	glfwGetCursorPos(window, &x, &y);
 	b2Vec2 p = func.ConvertScreenToWorld(window, x, y);
-
+	func.setPosicaoMouse(p);
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
@@ -39,13 +42,28 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 		if (action == GLFW_PRESS)
 		{
 			//TODO: line that shows the target? Those thingies?
-
+			func.setPressionou(true);
 		}
 		if (action == GLFW_RELEASE)
 		{
 			//TODO: throw the damn ball
 			//as in: add physics to it, and move it to where the mouse is
 			//add it to the array of bubbles and create new bubble
+			func.setPressionou(false);
+			func.getBolaAtiravel()->SetGravityScale(9);
+
+			//criar vetor AB
+			b2Vec2 vetorForca = func.getPosicaoMouse() - func.getBolaAtiravel()->GetWorldCenter();
+			//passar pra um vetor glm pra usar a normalização
+			glm::vec2 vetorAuxiliar;
+			vetorAuxiliar.x = vetorForca.x;
+			vetorAuxiliar.y = vetorForca.y;
+			glm::vec2 vetorAuxiliarNormalizado = glm::normalize(vetorAuxiliar);
+			//devolver pro formato que a box entende, multiplicado pela força
+			vetorForca.x = vetorAuxiliarNormalizado.x * 3000;
+			vetorForca.y = vetorAuxiliarNormalizado.y * 3000;
+
+			func.getBolaAtiravel()->ApplyForceToCenter(vetorForca, true);
 		}
 	}
 }
@@ -129,9 +147,9 @@ int main() {
 
 	b2Body* bolaPrincipal = func.createMainBubble();
 	//0x, 30y
-	b2Body* bolaAtiravel = func.createCircle(func.getWorld(), 10, 10, 2.5, 1, 0.3, 0.5);
+	b2Body* bolaAtiravel = func.createCircle(func.getWorld(), 10, 10, 2.5, 0.2, 0.3, 0.5);
 	bolaAtiravel->SetGravityScale(0);
-	func.set
+	func.setBolaAtiravel(bolaAtiravel);
 
 	while (!glfwWindowShouldClose(window)) //loop da aplica��o :)
 	{
@@ -153,7 +171,7 @@ int main() {
 
 		if (width >= height)
 		{
-			ratio = width / (float)height;
+			ratio =  width / (float)height;
 			gluOrtho2D(func.getXMin()*ratio, func.getXMax()*ratio, func.getYMin(), func.getYMax());
 		}
 		else
