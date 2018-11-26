@@ -2,7 +2,8 @@
 #include <Box2D/Box2D.h>
 
 //Rotina que calcula a norma (módulo) de um vetor
-float norma(b2Vec2 v) {
+float norma(b2Vec2 v)
+{
 	return sqrt(v.x*v.x + v.y*v.y);
 }
 
@@ -22,7 +23,8 @@ float GrausParaRadianos(float angulo)
 }
 
 //Rotina que converte radianos para graus
-float RadianosParaGraus(float angle) {
+float RadianosParaGraus(float angle)
+{
 	return angle * 180 / b2_pi;
 }
 

@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7A79849B-69E7-47D4-8B8E-2C46943F4EF3}</ProjectGuid>
     <RootNamespace>HelloGLFW</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -121,17 +121,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Functions.cpp" />
+    <ClCompile Include="MyContactListener.cpp" />
     <ClCompile Include="QueryCallback.cpp" />
     <ClCompile Include="Render.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="UserData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Exercicios-1\Box2D - CharacterController - Mouse\HelloGLFW\QueryCallback.h" />
-    <ClInclude Include="..\..\..\Exercicios-1\HelloGLFW-Box2D\Exercicio-1\MatVet.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="MatVet.h" />
+    <ClInclude Include="MyContactListener.h" />
     <ClInclude Include="Render.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="UserData.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,6 @@
 #pragma once
 #include "Render.h"
+#include "UserData.h"
 #include <cstdlib>
 #include <list>
 
@@ -20,7 +21,6 @@ public:
 	void DrawFixture(b2Fixture* fixture, b2Color color, DebugDraw renderer);
 	b2Vec2 ConvertScreenToWorld(GLFWwindow* window, int32 x, int32 y);
 	b2Body* createMainBubble();
-	void BeginContact(b2Contact* contact);
 	void JogarBolinhas();
 	void desenharMira();
 
@@ -41,7 +41,6 @@ public:
 	void setMouseWorld(b2Vec2 mouseWorld);
 	b2MouseJoint* getMouseJoint();
 	void setMouseJoint(b2MouseJoint* mouseJoint);
-	char getAuxiliarBorda();
 	b2Body* getLinhaBaixo();
 	void setLinhaBaixo(b2Body* linhaCima);
 	std::list<b2Body*> getList();
@@ -51,6 +50,8 @@ public:
 	b2Vec2 getPosicaoMouse();
 	void setPressionou(bool pressionou);
 	bool getPressionou();
+	void setUserData(UserData userData);
+	UserData getUserData();
 
 #pragma endregion
 
@@ -65,9 +66,9 @@ private:
 	b2Vec2 mouseWorld;
 	b2MouseJoint* mouseJoint;
 	b2Body* linhaBaixo;
-	char auxiliarBorda;
 	std::list<b2Body*> bolas;
 	b2Body* bolaAtiravel;
 	b2Vec2 posicaoMouse;
 	bool pressionou;
+	UserData userData;
 };

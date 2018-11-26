@@ -2,14 +2,13 @@
 #include <ctime>
 #include <stdlib.h>
 #include <chrono>
+#include <glm/glm.hpp>
 #include "Functions.h"
 #include "MatVet.h"
-#include <glm/glm.hpp>
 #include "QueryCallback.h"
+#include "Timer.h"
 
 Functions func;
-
-bool pressionou = false;
 
 //Callback de erro - PADR�O DA GLFW - n�o precisa mexer
 static void error_callback(int error, const char* description)
@@ -41,14 +40,10 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 
 		if (action == GLFW_PRESS)
 		{
-			//TODO: line that shows the target? Those thingies?
 			func.setPressionou(true);
 		}
 		if (action == GLFW_RELEASE)
 		{
-			//TODO: throw the damn ball
-			//as in: add physics to it, and move it to where the mouse is
-			//add it to the array of bubbles and create new bubble
 			func.setPressionou(false);
 			func.getBolaAtiravel()->SetGravityScale(9);
 
@@ -64,6 +59,10 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 			vetorForca.y = vetorAuxiliarNormalizado.y * 3000;
 
 			func.getBolaAtiravel()->ApplyForceToCenter(vetorForca, true);
+
+			b2Body* novaBolaAtiravel = func.createCircle(func.getWorld(), 10, 10, 2.5, 0.2, 0.3, 0.5);
+			novaBolaAtiravel->SetGravityScale(0);
+			func.setBolaAtiravel(novaBolaAtiravel);
 		}
 	}
 }
@@ -117,12 +116,15 @@ int main() {
 	//Criando as bordas da tela e do copo
 	b2Body *linhaBaixo, *linhaEsq, *linhaDir;
 
+	UserData* userDataBorda = new UserData();
+	userDataBorda->setAuxiliarBorda = 'b';
+
 	func.setLinhaBaixo(func.createEdge(func.getWorld(), 0, -54, b2Vec2(-50, 15), b2Vec2(50, 15), 2, 2, 0));
-	func.getLinhaBaixo()->SetUserData((void*)func.getAuxiliarBorda());
+	func.getLinhaBaixo()->SetUserData(userDataBorda);
 	linhaEsq = func.createEdge(func.getWorld(), -65, 0, b2Vec2(15, -50), b2Vec2(15, 50), 2, 2, 0);
-	linhaEsq->SetUserData((void*)func.getAuxiliarBorda());
+	linhaEsq->SetUserData(userDataBorda);
 	linhaDir = func.createEdge(func.getWorld(), 35, 0, b2Vec2(15, -50), b2Vec2(15, 50), 2, 2, 0);
-	linhaDir->SetUserData((void*)func.getAuxiliarBorda());
+	linhaDir->SetUserData(userDataBorda);
 
 	b2Body *bordaEsq, *bordaDir, *bordaBaixo;
 
@@ -130,26 +132,12 @@ int main() {
 	bordaDir = func.createEdge(func.getWorld(), 30, -55, b2Vec2(-20, 20), b2Vec2(-15, 60), 1, 1, 1);
 	bordaBaixo = func.createEdge(func.getWorld(), 0, -55, b2Vec2(-15, 20), b2Vec2(10, 20), 1, 1, 1);
 
-	//Criando as bolas e setando o userData delas (usado pra setar a cor)
-	int cont = 1, posX = 5;
-
-	for (int i = 0; i < 25; i++) {
-		if (posX < 0) {
-			posX += 3;
-		}
-		b2Body *temp = func.createCircle(func.getWorld(), posX, i + 25, 2.5, 200, 10, 0);
-		temp->SetUserData((void*)cont);
-		if (cont > 4) { cont = 1; }
-		func.getList().push_back(temp);
-		cont++;
-		posX -= 3;
-	}
+	func.JogarBolinhas();
 
 	b2Body* bolaPrincipal = func.createMainBubble();
-	//0x, 30y
-	b2Body* bolaAtiravel = func.createCircle(func.getWorld(), 10, 10, 2.5, 0.2, 0.3, 0.5);
-	bolaAtiravel->SetGravityScale(0);
-	func.setBolaAtiravel(bolaAtiravel);
+
+	Timer* timer = new Timer();
+	timer->start();
 
 	while (!glfwWindowShouldClose(window)) //loop da aplica��o :)
 	{
@@ -180,9 +168,16 @@ int main() {
 			gluOrtho2D(func.getXMin(), func.getXMax(), func.getYMin()*ratio, func.getYMax()*ratio);
 		}
 
-		//if (func.getList().size < 8){
-		//	func.JogarBolinhas();
-		//}
+		if (func.getList().size < 8){
+			func.JogarBolinhas();
+		}
+
+		if (timer->getElapsedTime() >= 5) 
+		{
+			b2Body* bolaAtiravel = func.createCircle(func.getWorld(), 0, 30, 2.5, 0.2, 0.3, 0.5);
+			bolaAtiravel->SetGravityScale(0);
+			func.setBolaAtiravel(bolaAtiravel);
+		}
 
 		//Setando a matriz de modelo, para mandar desenhar as primitivas
 		glMatrixMode(GL_MODELVIEW);

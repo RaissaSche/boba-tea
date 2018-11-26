@@ -1,13 +1,13 @@
 #include "Functions.h"
 
-
-Functions::Functions() {
-	auxiliarBorda = 'b';
+Functions::Functions()
+{
 	pressionou = false;
 	xMin = -40.0;
 	xMax = 40.0;
 	yMin = -40.0;
 	yMax = 40.0; //ortho2D
+
 }
 Functions::~Functions() {}
 
@@ -112,24 +112,27 @@ void Functions::Render(b2World *world, DebugDraw renderer)
 		desenharMira();
 	}
 
-	char userData;
 	//PERCORRE A LISTA DE CORPOS R�GIDOS DO MUNDO E CHAMA A ROTINA DE DESENHO PARA A LISTA DE FIXTURES DE CADA UM
 	for (b = world->GetBodyList(); b; b = b->GetNext())
 	{
-		if ((char)b->GetUserData() == '\x1') {
+		if ((UserData*)b->GetUserData()->getAuxiliarBorda() == '\x1')
+		{
 			DrawBody(b, blue, renderer);
 		}
-		else if ((char)b->GetUserData() == '\x2') {
+		else if ((UserData*)b->GetUserData()->getAuxiliarBorda() == '\x2')
+		{
 			DrawBody(b, yellow, renderer);
 		}
-		else if ((char)b->GetUserData() == '\x3') {
+		else if ((UserData*)b->GetUserData()->getAuxiliarBorda() == '\x3')
+		{
 			DrawBody(b, pink, renderer);
 		}
-		else if ((char)b->GetUserData() == '\x4') {
+		else if ((UserData*)b->GetUserData()->getAuxiliarBorda() == '\x4')
+		{
 			DrawBody(b, green, renderer);
 		}
-		else if ((char)b->GetUserData() != 'b') {
-
+		else if ((UserData*)b->GetUserData()->getAuxiliarBorda() != 'b')
+		{
 			DrawBody(b, blue, renderer);
 		}
 
@@ -139,13 +142,12 @@ void Functions::Render(b2World *world, DebugDraw renderer)
 //Para chamar a rotina de desenho das fixtures de um corpo
 void Functions::DrawBody(b2Body *b, b2Color color, DebugDraw renderer)
 {
-
 	//Desenha todas as fixtures do corpo r�gido
 	b2Fixture *f;
 
 	for (f = b->GetFixtureList(); f; f = f->GetNext())
 	{
-		if ((char)f->GetUserData() != 'b')
+		if ((UserData*)f->GetUserData()->getAuxiliarBorda() != 'b')
 			DrawFixture(f, color, renderer);
 	}
 }
@@ -157,6 +159,7 @@ void Functions::DrawFixture(b2Fixture* fixture, b2Color color, DebugDraw rendere
 
 	switch (fixture->GetType())
 	{
+
 	case b2Shape::e_circle:
 	{
 		b2CircleShape* circle = (b2CircleShape*)fixture->GetShape();
@@ -182,8 +185,8 @@ void Functions::DrawFixture(b2Fixture* fixture, b2Color color, DebugDraw rendere
 
 		renderer.DrawPolygon(vertices, vertexCount, color);
 	}
-
 	break;
+
 	case b2Shape::e_edge:
 	{
 		b2EdgeShape* edge = (b2EdgeShape*)fixture->GetShape();
@@ -208,11 +211,9 @@ void Functions::DrawFixture(b2Fixture* fixture, b2Color color, DebugDraw rendere
 		vertexCount = i;
 		renderer.DrawPolygon(vertices, vertexCount, color);
 	}
-
 	break;
 
 	}
-
 }
 
 //Convers�o de coordenadas de tela para coords de universo (leva em considera��o o ortho)
@@ -245,12 +246,6 @@ b2Body* Functions::createMainBubble()
 	return bolaPrincipal;
 }
 
-void Functions::BeginContact(b2Contact * contact)
-{
-	b2Fixture* a = contact->GetFixtureA();
-	b2Fixture* b = contact->GetFixtureB();
-}
-
 // Fun��o de Execu��o da Simula��o
 void Functions::RunBox2D(b2World *world)
 {
@@ -259,16 +254,26 @@ void Functions::RunBox2D(b2World *world)
 }
 
 void Functions::JogarBolinhas(){
+	//Criando as bolas e setando o userData delas (usado pra setar a cor)
+
 	int cont = 1, posX = 5;
 
-	for (int i = 0; i < 25; i++) {
-		if (posX < 0) {
+	UserData* userDataCont = new UserData();
+
+	for (int i = 0; i < 25; i++)
+	{
+		if (posX < 0)
+		{
 			posX += 3;
 		}
-		b2Body *temp = createCircle(getWorld(), posX, i + 25, 2.5, 200, 10, 0);
-		temp->SetUserData((void*)cont);
+
+		b2Body *temp = createCircle(world, posX, i + 25, 2.5, 200, 10, 0);
+
+		userDataCont->setCont(cont);
+		temp->SetUserData(userDataCont);
+
 		if (cont > 4) { cont = 1; }
-		getList().push_back(temp);
+		bolas.push_back(temp);
 		cont++;
 		posX -= 3;
 	}
@@ -304,8 +309,6 @@ float Functions::getXMax() { return xMax; }
 float Functions::getYMin() { return yMin; }
 float Functions::getYMax() { return yMax; }
 
-char Functions::getAuxiliarBorda() { return auxiliarBorda; }
-
 std::list<b2Body*> Functions::getList() { return bolas; }
 
 void Functions::setBolaAtiravel(b2Body * _bolaAtiravel)
@@ -336,4 +339,14 @@ void Functions::setPressionou(bool pressionou)
 bool Functions::getPressionou()
 {
 	return pressionou;
+}
+
+void Functions::setUserData(UserData userData)
+{
+	this->userData = userData;
+}
+
+UserData Functions::getUserData()
+{
+	return userData;
 }

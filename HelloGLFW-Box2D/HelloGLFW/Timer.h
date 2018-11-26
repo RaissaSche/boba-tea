@@ -1,32 +1,42 @@
 #pragma once
 #include<time.h>
 
-class Timer {
+class Timer
+{
+
 private:
 	clock_t begin, end;
+
 public:
-	Timer() {
+
+	Timer()
+	{
 		this->reset();
 	}
 
-	void start() {
+	void start()
+	{
 		this->begin = clock();
 	}
 
-	void finish() {
+	void finish()
+	{
 		this->end = clock();
 	}
 
-	void reset() {
+	void reset()
+	{
 		this->begin = 0;
 		this->end = 0;
 	}
 
-	double getElapsedTime() {
+	double getElapsedTime()
+	{
 		return ((double)(this->end - this->begin)) / CLOCKS_PER_SEC;
 	}
 
-	double getElapsedTimeMs() {
+	double getElapsedTimeMs()
+	{
 		return this->getElapsedTime() * 1000;
 	}
 };
