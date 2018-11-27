@@ -11,7 +11,7 @@ Functions::Functions()
 }
 Functions::~Functions() {}
 
-b2Body* Functions::createBox(b2World *world, float posX, float posY, float sizeY, float sizeX, float density, float coefF, float coefR)
+b2Body* Functions::createBox(float posX, float posY, float sizeY, float sizeX, float density, float coefF, float coefR)
 {
 	b2Body *novoObjeto;
 
@@ -33,7 +33,7 @@ b2Body* Functions::createBox(b2World *world, float posX, float posY, float sizeY
 	return novoObjeto;
 }
 
-b2Body* Functions::createCircle(b2World *worldo, float posX, float posY, float radius, float density, float coefF, float coefR)
+b2Body* Functions::createCircle(float posX, float posY, float radius, float density, float coefF, float coefR)
 {
 	b2Body *novoObjeto;
 
@@ -56,7 +56,7 @@ b2Body* Functions::createCircle(b2World *worldo, float posX, float posY, float r
 	return novoObjeto;
 }
 
-b2Body* Functions::createEdge(b2World *world, float posX, float posY, b2Vec2 vec1, b2Vec2 vec2, float density, float coefF, float coefR)
+b2Body* Functions::createEdge(float posX, float posY, b2Vec2 vec1, b2Vec2 vec2, float density, float coefF, float coefR)
 {
 	b2Body *novoObjeto;
 
@@ -79,7 +79,7 @@ b2Body* Functions::createEdge(b2World *world, float posX, float posY, b2Vec2 vec
 	return novoObjeto;
 }
 
-void Functions::Render(b2World *worldo, DebugDraw renderer)
+void Functions::Render(DebugDraw renderer)
 {
 	b2Body *b;
 	glColor3f(1, 0, 0);
@@ -112,10 +112,6 @@ void Functions::Render(b2World *worldo, DebugDraw renderer)
 		desenharMira();
 	}
 
-	//PERCORRE A LISTA DE CORPOS R�GIDOS DO MUNDO E CHAMA A ROTINA DE DESENHO PARA A LISTA DE FIXTURES DE CADA UM
-	int n = world->GetBodyCount();
-	
-	
 	for (b = world->GetBodyList(); b; b = b->GetNext())
 	{
 		UserData* userDataAuxiliarBorda = (UserData*)b->GetUserData();
@@ -254,24 +250,24 @@ b2Vec2 Functions::ConvertScreenToWorld(GLFWwindow* window, int32 x, int32 y)
 
 b2Body* Functions::createMainBubble()
 {
-	b2Body* bolaPrincipal = createCircle(getWorld(), getMouseWorld().x, getMouseWorld().y, 2.5, 1, 0.3, 0.5);
+	b2Body* bolaPrincipal = createCircle(getMouseWorld().x, getMouseWorld().y, 2.5, 1, 0.3, 0.5);
 	bolas.push_back(bolaPrincipal);
 	return bolaPrincipal;
 }
 
 // Fun��o de Execu��o da Simula��o
-void Functions::RunBox2D(b2World *world)
+void Functions::RunBox2D()
 {
 	world->Step(timeStep, velocityIterations, positionIterations);
 	world->ClearForces();
 }
 
-void Functions::JogarBolinhas(){
+void Functions::JogarBolinhas() {
 	//Criando as bolas e setando o userData delas (usado pra setar a cor)
 
 	int cont = 1, posX = 5;
 
-	
+
 
 	for (int i = 0; i < 25; i++)
 	{
@@ -280,7 +276,7 @@ void Functions::JogarBolinhas(){
 			posX += 3;
 		}
 
-		b2Body *temp = createCircle(world, posX, i + 25, 2.5, 200, 10, 0);
+		b2Body *temp = createCircle(posX, i + 25, 2.5, 200, 10, 0);
 		UserData* userDataCont = new UserData;
 		userDataCont->setCont(cont);
 		temp->SetUserData(userDataCont);
@@ -307,9 +303,6 @@ void Functions::setWorld(b2World * world) { this->world = world; }
 
 b2Vec2 Functions::getMouseWorld() { return mouseWorld; }
 void Functions::setMouseWorld(b2Vec2 mouseWorld) { this->mouseWorld = mouseWorld; }
-
-b2MouseJoint * Functions::getMouseJoint() { return mouseJoint; }
-void Functions::setMouseJoint(b2MouseJoint * mouseJoint) { this->mouseJoint = mouseJoint; }
 
 b2Body* Functions::getLinhaBaixo() { return linhaBaixo; }
 void Functions::setLinhaBaixo(b2Body * linhaBaixo) { this->linhaBaixo = linhaBaixo; }

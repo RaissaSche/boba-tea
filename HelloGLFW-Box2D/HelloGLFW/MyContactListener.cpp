@@ -1,6 +1,9 @@
 #include "MyContactListener.h"
 
-MyContactListener::MyContactListener() {}
+MyContactListener::MyContactListener(b2World * world)
+{
+	contactWorldCopy = world;
+}
 
 MyContactListener::~MyContactListener() {}
 
@@ -24,9 +27,8 @@ void MyContactListener::BeginContact(b2Contact * contact)
 
 	if (userDataA->getIsIgual() >= 3)
 	{
-		//for (b = func.getWorld()->GetBodyList(); b; b = b->GetNext()) 
+		//for (b = contactWorldCopy->GetBodyList(); b; b = b->GetNext()) 
 		//{
-			//HOW THE DAMN WILL I GET THE SAME FUNCTION??????
 
 			//delete the balls???
 		//}

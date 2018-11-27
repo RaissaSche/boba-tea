@@ -3,7 +3,6 @@
 #include "UserData.h"
 #include <cstdlib>
 #include <list>
-#include <iostream>
 
 class Functions
 {
@@ -12,12 +11,12 @@ public:
 	~Functions();
 
 	// Fun��o de Execu��o da Simula��o
-	void RunBox2D(b2World *world);
+	void RunBox2D();
 
-	b2Body* createBox(b2World *world, float posX, float posY, float sizeY, float sizeX, float density, float coefF, float coefR);
-	b2Body* createCircle(b2World *world, float posX, float posY, float radius, float density, float coefF, float coefR);
-	b2Body* createEdge(b2World *world, float posX, float posY, b2Vec2 vec1, b2Vec2 vec2, float density, float coefF, float coefR);
-	void Render(b2World *world, DebugDraw renderer);
+	b2Body* createBox(float posX, float posY, float sizeY, float sizeX, float density, float coefF, float coefR);
+	b2Body* createCircle(float posX, float posY, float radius, float density, float coefF, float coefR);
+	b2Body* createEdge(float posX, float posY, b2Vec2 vec1, b2Vec2 vec2, float density, float coefF, float coefR);
+	void Render(DebugDraw renderer);
 	void DrawBody(b2Body *b, b2Color color, DebugDraw renderer);
 	void DrawFixture(b2Fixture* fixture, b2Color color, DebugDraw renderer);
 	b2Vec2 ConvertScreenToWorld(GLFWwindow* window, int32 x, int32 y);
@@ -65,7 +64,6 @@ private:
 	DebugDraw d;
 	b2World *world;
 	b2Vec2 mouseWorld;
-	b2MouseJoint* mouseJoint;
 	b2Body* linhaBaixo;
 	std::list<b2Body*> bolas;
 	b2Body* bolaAtiravel;
