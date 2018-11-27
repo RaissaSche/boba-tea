@@ -62,6 +62,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 
 			b2Body* novaBolaAtiravel = func.createCircle(10, 10, 2.5, 0.2, 0.3, 0.5);
 			novaBolaAtiravel->SetGravityScale(0);
+			novaBolaAtiravel->SetUserData(new UserData);
 			func.setBolaAtiravel(novaBolaAtiravel);
 		}
 	}
@@ -128,9 +129,14 @@ int main() {
 
 	b2Body *bordaEsq, *bordaDir, *bordaBaixo;
 
+	UserData* userDataPlaceholer = new UserData;
+
 	bordaEsq = func.createEdge(5, -55, b2Vec2(-25, 60), b2Vec2(-20, 20), 1, 1, 1);
+	bordaEsq->SetUserData(userDataPlaceholer);
 	bordaDir = func.createEdge(30, -55, b2Vec2(-20, 20), b2Vec2(-15, 60), 1, 1, 1);
+	bordaDir->SetUserData(userDataPlaceholer);
 	bordaBaixo = func.createEdge(0, -55, b2Vec2(-15, 20), b2Vec2(10, 20), 1, 1, 1);
+	bordaBaixo->SetUserData(userDataPlaceholer);
 
 	func.JogarBolinhas();
 
@@ -159,7 +165,7 @@ int main() {
 
 		if (width >= height)
 		{
-			ratio =  width / (float)height;
+			ratio = width / (float)height;
 			gluOrtho2D(func.getXMin()*ratio, func.getXMax()*ratio, func.getYMin(), func.getYMax());
 		}
 		else
@@ -172,10 +178,11 @@ int main() {
 			func.JogarBolinhas();
 		}*/
 
-		if (timer->getElapsedTime() >= 5) 
+		if (timer->getElapsedTime() >= 5)
 		{
 			b2Body* bolaAtiravel = func.createCircle(0, 30, 2.5, 0.2, 0.3, 0.5);
 			bolaAtiravel->SetGravityScale(0);
+			bolaAtiravel->SetUserData(new UserData);
 			func.setBolaAtiravel(bolaAtiravel);
 		}
 

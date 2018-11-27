@@ -1,13 +1,15 @@
-Libs are already included in the project, to guarantee it's rendered in the same version
-Linkagem:
-C/C++:  E:\Exercicios-1\Box2D-lib
-	E:\Exercicios-1\GLFW-3.1.2-lib\include
+Libs are already included in the project, to guarantee it's rendered in the same version(x86)
+Linkage:
+C/C++:  ..\..\Box2D-lib\
+	..\..\GLFW-3.1.2-lib\include
 
-Vinculador: E:\Exercicios-1\Box2D-lib\lib
-	    E:\Exercicios-1\GLFW-3.1.2-lib\lib
+Linker: ..\..\GLFW-3.1.2-lib\lib
+	    ..\..\Box2D-lib\lib
+		
+		glfw3.lib
+		box2d.lib
+		opengl32.lib
 
 References:
-http://www.cplusplus.com/reference/chrono/
 https://www.freetype.org/
 http://box2d.org/manual.pdf
-

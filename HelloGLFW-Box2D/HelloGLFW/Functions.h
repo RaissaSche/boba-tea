@@ -65,11 +65,11 @@ private:
 	b2World *world;
 	b2Vec2 mouseWorld;
 	b2Body* linhaBaixo;
-	std::list<b2Body*> bolas;
 	b2Body* bolaAtiravel;
 	b2Vec2 posicaoMouse;
 	bool pressionou;
 	UserData userData;
-
+	int cont;
+	int	posX;
 	
 };

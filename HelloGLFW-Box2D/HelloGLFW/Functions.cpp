@@ -7,6 +7,8 @@ Functions::Functions()
 	xMax = 40.0;
 	yMin = -40.0;
 	yMax = 40.0; //ortho2D
+	cont = 1;
+	posX = 5;
 
 }
 Functions::~Functions() {}
@@ -251,7 +253,6 @@ b2Vec2 Functions::ConvertScreenToWorld(GLFWwindow* window, int32 x, int32 y)
 b2Body* Functions::createMainBubble()
 {
 	b2Body* bolaPrincipal = createCircle(getMouseWorld().x, getMouseWorld().y, 2.5, 1, 0.3, 0.5);
-	bolas.push_back(bolaPrincipal);
 	return bolaPrincipal;
 }
 
@@ -265,24 +266,21 @@ void Functions::RunBox2D()
 void Functions::JogarBolinhas() {
 	//Criando as bolas e setando o userData delas (usado pra setar a cor)
 
-	int cont = 1, posX = 5;
+	const int QTD_BOLINHAS = 25;
 
-
-
-	for (int i = 0; i < 25; i++)
+	for (int i = 0; i < QTD_BOLINHAS; i++)
 	{
 		if (posX < 0)
 		{
 			posX += 3;
 		}
 
-		b2Body *temp = createCircle(posX, i + 25, 2.5, 200, 10, 0);
+		b2Body *bubble = createCircle(posX, i + 25, 2.5, 200, 10, 0);
 		UserData* userDataCont = new UserData;
 		userDataCont->setCont(cont);
-		temp->SetUserData(userDataCont);
+		bubble->SetUserData(userDataCont);
 
 		if (cont > 4) { cont = 1; }
-		bolas.push_back(temp);
 		cont++;
 		posX -= 3;
 	}
@@ -315,8 +313,6 @@ float Functions::getXMin() { return xMin; }
 float Functions::getXMax() { return xMax; }
 float Functions::getYMin() { return yMin; }
 float Functions::getYMax() { return yMax; }
-
-std::list<b2Body*> Functions::getList() { return bolas; }
 
 void Functions::setBolaAtiravel(b2Body * _bolaAtiravel)
 {
