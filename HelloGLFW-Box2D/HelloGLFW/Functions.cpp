@@ -33,7 +33,7 @@ b2Body* Functions::createBox(b2World *world, float posX, float posY, float sizeY
 	return novoObjeto;
 }
 
-b2Body* Functions::createCircle(b2World *world, float posX, float posY, float radius, float density, float coefF, float coefR)
+b2Body* Functions::createCircle(b2World *worldo, float posX, float posY, float radius, float density, float coefF, float coefR)
 {
 	b2Body *novoObjeto;
 
@@ -79,7 +79,7 @@ b2Body* Functions::createEdge(b2World *world, float posX, float posY, b2Vec2 vec
 	return novoObjeto;
 }
 
-void Functions::Render(b2World *world, DebugDraw renderer)
+void Functions::Render(b2World *worldo, DebugDraw renderer)
 {
 	b2Body *b;
 	glColor3f(1, 0, 0);
@@ -113,27 +113,36 @@ void Functions::Render(b2World *world, DebugDraw renderer)
 	}
 
 	//PERCORRE A LISTA DE CORPOS R�GIDOS DO MUNDO E CHAMA A ROTINA DE DESENHO PARA A LISTA DE FIXTURES DE CADA UM
+	int n = world->GetBodyCount();
+	
+	
 	for (b = world->GetBodyList(); b; b = b->GetNext())
 	{
-		if ((UserData*)b->GetUserData()->getAuxiliarBorda() == '\x1')
+		UserData* userDataAuxiliarBorda = (UserData*)b->GetUserData();
+
+		if (userDataAuxiliarBorda)
 		{
-			DrawBody(b, blue, renderer);
-		}
-		else if ((UserData*)b->GetUserData()->getAuxiliarBorda() == '\x2')
-		{
-			DrawBody(b, yellow, renderer);
-		}
-		else if ((UserData*)b->GetUserData()->getAuxiliarBorda() == '\x3')
-		{
-			DrawBody(b, pink, renderer);
-		}
-		else if ((UserData*)b->GetUserData()->getAuxiliarBorda() == '\x4')
-		{
-			DrawBody(b, green, renderer);
-		}
-		else if ((UserData*)b->GetUserData()->getAuxiliarBorda() != 'b')
-		{
-			DrawBody(b, blue, renderer);
+
+			if (userDataAuxiliarBorda->getCont() == '\x1')
+			{
+				DrawBody(b, blue, renderer);
+			}
+			else if (userDataAuxiliarBorda->getCont() == '\x2')
+			{
+				DrawBody(b, yellow, renderer);
+			}
+			else if (userDataAuxiliarBorda->getCont() == '\x3')
+			{
+				DrawBody(b, pink, renderer);
+			}
+			else if (userDataAuxiliarBorda->getCont() == '\x4')
+			{
+				DrawBody(b, green, renderer);
+			}
+			else if (userDataAuxiliarBorda->getAuxiliarBorda() != 'b')
+			{
+				DrawBody(b, blue, renderer);
+			}
 		}
 
 	}
@@ -147,8 +156,12 @@ void Functions::DrawBody(b2Body *b, b2Color color, DebugDraw renderer)
 
 	for (f = b->GetFixtureList(); f; f = f->GetNext())
 	{
-		if ((UserData*)f->GetUserData()->getAuxiliarBorda() != 'b')
-			DrawFixture(f, color, renderer);
+		UserData* userDataAuxiliar = (UserData*)f->GetUserData();
+		if (userDataAuxiliar)
+		{
+			if (userDataAuxiliar->getAuxiliarBorda() != 'b')
+				DrawFixture(f, color, renderer);
+		}
 	}
 }
 
@@ -258,7 +271,7 @@ void Functions::JogarBolinhas(){
 
 	int cont = 1, posX = 5;
 
-	UserData* userDataCont = new UserData();
+	
 
 	for (int i = 0; i < 25; i++)
 	{
@@ -268,7 +281,7 @@ void Functions::JogarBolinhas(){
 		}
 
 		b2Body *temp = createCircle(world, posX, i + 25, 2.5, 200, 10, 0);
-
+		UserData* userDataCont = new UserData;
 		userDataCont->setCont(cont);
 		temp->SetUserData(userDataCont);
 
@@ -277,6 +290,7 @@ void Functions::JogarBolinhas(){
 		cont++;
 		posX -= 3;
 	}
+
 }
 
 void Functions::desenharMira()

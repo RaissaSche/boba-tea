@@ -9,24 +9,27 @@ void MyContactListener::BeginContact(b2Contact * contact)
 	b2Fixture* a = contact->GetFixtureA();
 	b2Fixture* b = contact->GetFixtureB();
 
-	if ((UserData*)a->GetUserData()->getCont() == (UserData*)b->GetUserData()->getCont())
-	{
-		(UserData*)a->GetUserData()->addIsIgual();
-		(UserData*)a->GetUserData()->setid(getId());
+	UserData* userDataA = (UserData*)a->GetUserData();
+	UserData* userDataB = (UserData*)b->GetUserData();
 
-		(UserData*)b->GetUserData()->addIsIgual();
-		(UserData*)b->GetUserData()->setid(a->GetUserData()->getId());
+	if (userDataA->getCont() == userDataB->getCont())
+	{
+		userDataA->addIsIgual();
+		userDataA->setId(getId());
+
+		userDataB->addIsIgual();
+		userDataB->setId(userDataA->getId());
 		addId();
 	}
 
-	if (a->GetUserData()->getIsIgual() >= 3)
+	if (userDataA->getIsIgual() >= 3)
 	{
-		for (b = func.getWorld()->GetBodyList(); b; b = b->GetNext()) 
-		{
+		//for (b = func.getWorld()->GetBodyList(); b; b = b->GetNext()) 
+		//{
 			//HOW THE DAMN WILL I GET THE SAME FUNCTION??????
 
 			//delete the balls???
-		}
+		//}
 	}
 }
 

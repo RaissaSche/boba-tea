@@ -117,7 +117,7 @@ int main() {
 	b2Body *linhaBaixo, *linhaEsq, *linhaDir;
 
 	UserData* userDataBorda = new UserData();
-	userDataBorda->setAuxiliarBorda = 'b';
+	userDataBorda->setAuxiliarBorda('b');
 
 	func.setLinhaBaixo(func.createEdge(func.getWorld(), 0, -54, b2Vec2(-50, 15), b2Vec2(50, 15), 2, 2, 0));
 	func.getLinhaBaixo()->SetUserData(userDataBorda);
@@ -168,9 +168,9 @@ int main() {
 			gluOrtho2D(func.getXMin(), func.getXMax(), func.getYMin()*ratio, func.getYMax()*ratio);
 		}
 
-		if (func.getList().size < 8){
+		/*if (func.getList().size < 8){
 			func.JogarBolinhas();
-		}
+		}*/
 
 		if (timer->getElapsedTime() >= 5) 
 		{

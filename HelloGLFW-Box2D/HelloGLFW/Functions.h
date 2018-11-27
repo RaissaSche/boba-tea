@@ -3,6 +3,7 @@
 #include "UserData.h"
 #include <cstdlib>
 #include <list>
+#include <iostream>
 
 class Functions
 {
@@ -71,4 +72,6 @@ private:
 	b2Vec2 posicaoMouse;
 	bool pressionou;
 	UserData userData;
+
+	
 };
