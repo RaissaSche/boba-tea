@@ -151,14 +151,16 @@ void Functions::DrawBody(b2Body *b, b2Color color, DebugDraw renderer)
 {
 	//Desenha todas as fixtures do corpo r�gido
 	b2Fixture *f;
-
-	for (f = b->GetFixtureList(); f; f = f->GetNext())
+	for (b = world->GetBodyList(); b; b = b->GetNext())
 	{
-		UserData* userDataAuxiliar = (UserData*)f->GetUserData();
+		UserData* userDataAuxiliar = (UserData*)b->GetUserData();
 		if (userDataAuxiliar)
 		{
+			f = b->GetFixtureList();
 			if (userDataAuxiliar->getAuxiliarBorda() != 'b')
+			{
 				DrawFixture(f, color, renderer);
+			}
 		}
 	}
 }
