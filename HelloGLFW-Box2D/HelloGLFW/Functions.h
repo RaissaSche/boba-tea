@@ -1,6 +1,7 @@
 #pragma once
 #include "Render.h"
 #include "UserData.h"
+#include "Timer.h"
 #include <cstdlib>
 #include <list>
 
@@ -21,7 +22,7 @@ public:
 	void DrawFixture(b2Fixture* fixture, b2Color color, DebugDraw renderer);
 	b2Vec2 ConvertScreenToWorld(GLFWwindow* window, int32 x, int32 y);
 	b2Body* createMainBubble();
-	void JogarBolinhas();
+	bool JogarBolinhas();
 	void desenharMira();
 
 #pragma region GETs e SETs
@@ -52,6 +53,7 @@ public:
 	bool getPressionou();
 	void setUserData(UserData userData);
 	UserData getUserData();
+	Timer* getTimer();
 
 #pragma endregion
 
@@ -71,5 +73,6 @@ private:
 	UserData userData;
 	int cont;
 	int	posX;
+	Timer* timer;
 	
 };

@@ -9,6 +9,7 @@ Functions::Functions()
 	yMax = 40.0; //ortho2D
 	cont = 1;
 	posX = 5;
+	timer = new Timer;
 
 }
 Functions::~Functions() {}
@@ -121,19 +122,19 @@ void Functions::Render(DebugDraw renderer)
 		if (userDataAuxiliarBorda)
 		{
 
-			if (userDataAuxiliarBorda->getCont() == '\x1')
+			if (userDataAuxiliarBorda->getCont() == 1)
 			{
 				DrawBody(b, blue, renderer);
 			}
-			else if (userDataAuxiliarBorda->getCont() == '\x2')
+			else if (userDataAuxiliarBorda->getCont() == 2)
 			{
 				DrawBody(b, yellow, renderer);
 			}
-			else if (userDataAuxiliarBorda->getCont() == '\x3')
+			else if (userDataAuxiliarBorda->getCont() == 3)
 			{
 				DrawBody(b, pink, renderer);
 			}
-			else if (userDataAuxiliarBorda->getCont() == '\x4')
+			else if (userDataAuxiliarBorda->getCont() == 4)
 			{
 				DrawBody(b, green, renderer);
 			}
@@ -265,7 +266,8 @@ void Functions::RunBox2D()
 	world->ClearForces();
 }
 
-void Functions::JogarBolinhas() {
+bool Functions::JogarBolinhas() {
+
 	//Criando as bolas e setando o userData delas (usado pra setar a cor)
 
 	const int QTD_BOLINHAS = 25;
@@ -286,6 +288,8 @@ void Functions::JogarBolinhas() {
 		cont++;
 		posX -= 3;
 	}
+
+	return true;
 
 }
 
@@ -354,4 +358,9 @@ void Functions::setUserData(UserData userData)
 UserData Functions::getUserData()
 {
 	return userData;
+}
+
+Timer * Functions::getTimer()
+{
+	return timer;
 }

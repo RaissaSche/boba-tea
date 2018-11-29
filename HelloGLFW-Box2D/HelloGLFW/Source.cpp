@@ -60,7 +60,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 
 			func.getBolaAtiravel()->ApplyForceToCenter(vetorForca, true);
 
-			b2Body* novaBolaAtiravel = func.createCircle(10, 10, 2.5, 0.2, 0.3, 0.5);
+			b2Body* novaBolaAtiravel = func.createCircle(0, 10, 2.5, 0.2, 0.3, 0.5);
 			novaBolaAtiravel->SetGravityScale(0);
 			novaBolaAtiravel->SetUserData(new UserData);
 			func.setBolaAtiravel(novaBolaAtiravel);
@@ -138,12 +138,19 @@ int main() {
 	bordaBaixo = func.createEdge(0, -55, b2Vec2(-15, 20), b2Vec2(10, 20), 1, 1, 1);
 	bordaBaixo->SetUserData(userDataPlaceholer);
 
-	func.JogarBolinhas();
+	bool bolinhasJaAtiradas = func.JogarBolinhas();
+
+	if (bolinhasJaAtiradas) {
+
+		b2Body* bolaAtiravel = func.createCircle(0, 30, 2.5, 0.2, 0.3, 0.5);
+		bolaAtiravel->SetGravityScale(0);
+		bolaAtiravel->SetUserData(new UserData);
+		func.setBolaAtiravel(bolaAtiravel);
+	}
+
+	func.getTimer()->getElapsedTime();
 
 	b2Body* bolaPrincipal = func.createMainBubble();
-
-	Timer* timer = new Timer;
-	timer->start();
 
 	while (!glfwWindowShouldClose(window)) //loop da aplica��o :)
 	{
@@ -177,14 +184,6 @@ int main() {
 		/*if (func.getList().size < 8){
 			func.JogarBolinhas();
 		}*/
-
-		if (timer->getElapsedTime() >= 5)
-		{
-			b2Body* bolaAtiravel = func.createCircle(0, 30, 2.5, 0.2, 0.3, 0.5);
-			bolaAtiravel->SetGravityScale(0);
-			bolaAtiravel->SetUserData(new UserData);
-			func.setBolaAtiravel(bolaAtiravel);
-		}
 
 		//Setando a matriz de modelo, para mandar desenhar as primitivas
 		glMatrixMode(GL_MODELVIEW);
