@@ -105,6 +105,35 @@ b2Body* Functions::createEdge(float posX, float posY, b2Vec2 vec1, b2Vec2 vec2, 
 	return novoObjeto;
 }
 
+
+void Functions::createMainBubble()
+{
+	getBolaAtiravel()->GetWorld()->DestroyBody(getBolaAtiravel());
+
+	b2Body* bolaAtiravel = createCircle(0, 20, 2.5, 0.2, 0.3, 0.5);
+	bolaAtiravel->SetGravityScale(9);
+	bolaAtiravel->SetUserData(new UserData);
+	setBolaAtiravel(bolaAtiravel);
+
+	//timer->start();
+	//int counter = 0;
+	//while (timer->elapsedSeconds() < 1.0)
+	//{
+	//	counter++;
+	//}
+	//timer->stop();
+
+	createMainBubbleCallback();
+}
+
+void Functions::createMainBubbleCallback()
+{
+	b2Body* bolaAtiravelStatic = createCircle(0, 20, 2.5, 0.2, 0.3, 0.5);
+	bolaAtiravelStatic->SetGravityScale(9);
+	bolaAtiravelStatic->SetUserData(new UserData);
+	setBolaAtiravel(bolaAtiravelStatic);
+}
+
 void Functions::Render(DebugDraw renderer)
 {
 	b2Body *b;
@@ -168,6 +197,35 @@ void Functions::Render(DebugDraw renderer)
 		}
 
 	}
+}
+
+
+bool Functions::JogarBolinhas() {
+
+	//Criando as bolas e setando o userData delas (usado pra setar a cor)
+
+	const int QTD_BOLINHAS = 25;
+
+	for (int i = 0; i < QTD_BOLINHAS; i++)
+	{
+		if (posX < 0)
+		{
+			posX += 3;
+		}
+
+		b2Body *bubble = createCircle(posX, i + 25, 2.5, 200, 10, 0);
+		UserData* userDataCont = new UserData;
+		userDataCont->setCont(cont);
+		bubble->SetUserData(userDataCont);
+
+		if (cont > 4) { cont = 1; }
+		cont++;
+		posX -= 3;
+	}
+
+	b2Body* bolaExtra = createCircle(getMouseWorld().x, getMouseWorld().y, 2.5, 1, 0.3, 0.5);
+
+	return true;
 }
 
 //Para chamar a rotina de desenho das fixtures de um corpo
@@ -276,56 +334,11 @@ b2Vec2 Functions::ConvertScreenToWorld(GLFWwindow* window, int32 x, int32 y)
 	return p;
 }
 
-void Functions::createMainBubble()
-{
-	getBolaAtiravel()->GetWorld()->DestroyBody(getBolaAtiravel());
-
-	b2Body* bolaAtiravel = createCircle(0, 20, 2.5, 0.2, 0.3, 0.5);
-	bolaAtiravel->SetGravityScale(9);
-	bolaAtiravel->SetUserData(new UserData);
-	setBolaAtiravel(bolaAtiravel);
-
-	std::this_thread::sleep_for(std::chrono::seconds(2));
-
-	b2Body* bolaAtiravelStatic = createStaticCircle(0, 20, 2.5, 0.2, 0.3, 0.5);
-	bolaAtiravelStatic->SetGravityScale(9);
-	bolaAtiravelStatic->SetUserData(new UserData);
-	setBolaAtiravel(bolaAtiravelStatic);
-}
-
 // Fun��o de Execu��o da Simula��o
 void Functions::RunBox2D()
 {
 	world->Step(timeStep, velocityIterations, positionIterations);
 	world->ClearForces();
-}
-
-bool Functions::JogarBolinhas() {
-
-	//Criando as bolas e setando o userData delas (usado pra setar a cor)
-
-	const int QTD_BOLINHAS = 25;
-
-	for (int i = 0; i < QTD_BOLINHAS; i++)
-	{
-		if (posX < 0)
-		{
-			posX += 3;
-		}
-
-		b2Body *bubble = createCircle(posX, i + 25, 2.5, 200, 10, 0);
-		UserData* userDataCont = new UserData;
-		userDataCont->setCont(cont);
-		bubble->SetUserData(userDataCont);
-
-		if (cont > 4) { cont = 1; }
-		cont++;
-		posX -= 3;
-	}
-
-	b2Body* bolaExtra = createCircle(getMouseWorld().x, getMouseWorld().y, 2.5, 1, 0.3, 0.5);
-
-	return true;
 }
 
 void Functions::desenharMira()
@@ -395,7 +408,7 @@ UserData Functions::getUserData()
 	return userData;
 }
 
-Timer * Functions::getTimer()
+Timer* Functions::getTimer()
 {
 	return timer;
 }

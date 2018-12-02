@@ -2,6 +2,7 @@
 #include <ctime>
 #include <stdlib.h>
 #include <chrono>
+#include <thread>
 #include <glm/glm.hpp>
 #include "Functions.h"
 #include "MatVet.h"
@@ -74,6 +75,8 @@ int main() {
 
 	func.setBolaAtiravel(func.createCircle(0, 20, 2.5, 0.2, 0.3, 0.5));
 
+	//std::thread mainBubble(func.createMainBubble);
+
 	//Objeto para a classe que faz o desenho das formas de colis�o dos corpos r�gidos
 
 	func.setTimeStep(1.0 / 60.0);
@@ -138,8 +141,6 @@ int main() {
 	bordaBaixo->SetUserData(userDataPlaceholer);
 
 	func.JogarBolinhas();
-
-	func.getTimer()->getElapsedTime();
 
 	while (!glfwWindowShouldClose(window)) //loop da aplica��o :)
 	{

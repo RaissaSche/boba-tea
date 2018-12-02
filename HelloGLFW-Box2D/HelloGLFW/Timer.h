@@ -1,48 +1,23 @@
 #pragma once
-#include<time.h>
+#include <iostream>
+#include <chrono>
+#include <ctime>
+#include <cmath>
 
 class Timer
 {
 
-private:
-	clock_t begin, end;
-	bool notEnded = true;
-
 public:
+	Timer();
+	~Timer();
 
-	Timer()
-	{
-		this->reset();
-	}
+	void start();
+	void stop();
+	double elapsedMilliseconds();
+	double elapsedSeconds();
 
-	void start()
-	{
-		this->begin = clock();
-
-		while (notEnded) {
-			begin++;
-		}
-	}
-
-	void finish()
-	{
-		this->end = clock();
-	}
-
-	void reset()
-	{
-		this->begin = 0;
-		this->end = 0;
-	}
-
-	double getElapsedTime()
-	{
-		//return ((double)(this->end - this->begin)) / CLOCKS_PER_SEC;
-		return begin;
-	}
-
-	double getElapsedTimeMs()
-	{
-		return this->getElapsedTime() * 1000;
-	}
+private:
+	std::chrono::time_point<std::chrono::system_clock> m_StartTime;
+	std::chrono::time_point<std::chrono::system_clock> m_EndTime;
+	bool m_bRunning;
 };
