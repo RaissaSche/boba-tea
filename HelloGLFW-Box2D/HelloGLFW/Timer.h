@@ -6,6 +6,7 @@ class Timer
 
 private:
 	clock_t begin, end;
+	bool notEnded = true;
 
 public:
 
@@ -17,6 +18,10 @@ public:
 	void start()
 	{
 		this->begin = clock();
+
+		while (notEnded) {
+			begin++;
+		}
 	}
 
 	void finish()
@@ -32,7 +37,8 @@ public:
 
 	double getElapsedTime()
 	{
-		return ((double)(this->end - this->begin)) / CLOCKS_PER_SEC;
+		//return ((double)(this->end - this->begin)) / CLOCKS_PER_SEC;
+		return begin;
 	}
 
 	double getElapsedTimeMs()

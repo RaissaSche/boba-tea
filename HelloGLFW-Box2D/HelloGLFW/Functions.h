@@ -4,6 +4,9 @@
 #include "Timer.h"
 #include <cstdlib>
 #include <list>
+#include <iostream>
+#include <chrono>
+#include <thread>
 
 class Functions
 {
@@ -16,12 +19,13 @@ public:
 
 	b2Body* createBox(float posX, float posY, float sizeY, float sizeX, float density, float coefF, float coefR);
 	b2Body* createCircle(float posX, float posY, float radius, float density, float coefF, float coefR);
+	b2Body* createStaticCircle(float posX, float posY, float radius, float density, float coefF, float coefR);
 	b2Body* createEdge(float posX, float posY, b2Vec2 vec1, b2Vec2 vec2, float density, float coefF, float coefR);
 	void Render(DebugDraw renderer);
 	void DrawBody(b2Body *b, b2Color color, DebugDraw renderer);
 	void DrawFixture(b2Fixture* fixture, b2Color color, DebugDraw renderer);
 	b2Vec2 ConvertScreenToWorld(GLFWwindow* window, int32 x, int32 y);
-	b2Body* createMainBubble();
+	void createMainBubble();
 	bool JogarBolinhas();
 	void desenharMira();
 
@@ -74,5 +78,4 @@ private:
 	int cont;
 	int	posX;
 	Timer* timer;
-	
 };

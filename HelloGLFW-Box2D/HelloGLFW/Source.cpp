@@ -45,7 +45,6 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 		if (action == GLFW_RELEASE)
 		{
 			func.setPressionou(false);
-			func.getBolaAtiravel()->SetGravityScale(9);
 
 			//criar vetor AB
 			b2Vec2 vetorForca = func.getPosicaoMouse() - func.getBolaAtiravel()->GetWorldCenter();
@@ -58,12 +57,10 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 			vetorForca.x = vetorAuxiliarNormalizado.x * 3000;
 			vetorForca.y = vetorAuxiliarNormalizado.y * 3000;
 
+			func.getBolaAtiravel()->SetGravityScale(9);
 			func.getBolaAtiravel()->ApplyForceToCenter(vetorForca, true);
 
-			b2Body* novaBolaAtiravel = func.createCircle(0, 10, 2.5, 0.2, 0.3, 0.5);
-			novaBolaAtiravel->SetGravityScale(0);
-			novaBolaAtiravel->SetUserData(new UserData);
-			func.setBolaAtiravel(novaBolaAtiravel);
+			func.createMainBubble();
 		}
 	}
 }
@@ -74,6 +71,8 @@ int main() {
 
 	b2Vec2 gravity(0.0f, -9.8f);
 	func.setWorld(new b2World(gravity));
+
+	func.setBolaAtiravel(func.createCircle(0, 20, 2.5, 0.2, 0.3, 0.5));
 
 	//Objeto para a classe que faz o desenho das formas de colis�o dos corpos r�gidos
 
@@ -138,19 +137,9 @@ int main() {
 	bordaBaixo = func.createEdge(0, -55, b2Vec2(-15, 20), b2Vec2(10, 20), 1, 1, 1);
 	bordaBaixo->SetUserData(userDataPlaceholer);
 
-	bool bolinhasJaAtiradas = func.JogarBolinhas();
-
-	if (bolinhasJaAtiradas) {
-
-		b2Body* bolaAtiravel = func.createCircle(0, 30, 2.5, 0.2, 0.3, 0.5);
-		bolaAtiravel->SetGravityScale(0);
-		bolaAtiravel->SetUserData(new UserData);
-		func.setBolaAtiravel(bolaAtiravel);
-	}
+	func.JogarBolinhas();
 
 	func.getTimer()->getElapsedTime();
-
-	b2Body* bolaPrincipal = func.createMainBubble();
 
 	while (!glfwWindowShouldClose(window)) //loop da aplica��o :)
 	{

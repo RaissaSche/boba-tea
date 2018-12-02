@@ -10,7 +10,6 @@ Functions::Functions()
 	cont = 1;
 	posX = 5;
 	timer = new Timer;
-
 }
 Functions::~Functions() {}
 
@@ -38,7 +37,7 @@ b2Body* Functions::createBox(float posX, float posY, float sizeY, float sizeX, f
 
 b2Body* Functions::createCircle(float posX, float posY, float radius, float density, float coefF, float coefR)
 {
-	b2Body *novoObjeto;
+	b2Body* novoObjeto;
 
 	b2BodyDef circle;
 	circle.position.Set(posX, posY);
@@ -48,6 +47,30 @@ b2Body* Functions::createCircle(float posX, float posY, float radius, float dens
 	b2CircleShape circulo;
 	circulo.m_radius = radius;
 	circulo.m_p.Set(posX, posY);
+	b2FixtureDef f;
+	f.shape = &circulo;
+	f.density = density;
+	f.friction = coefF;
+	f.restitution = coefR;
+
+	novoObjeto->CreateFixture(&f);
+
+	return novoObjeto;
+}
+
+b2Body* Functions::createStaticCircle(float posX, float posY, float radius, float density, float coefF, float coefR)
+{
+	b2Body* novoObjeto;
+
+	b2BodyDef circle;
+	circle.position.Set(posX, posY);
+	circle.type = b2_staticBody;
+	novoObjeto = world->CreateBody(&circle);
+
+	b2CircleShape circulo;
+	circulo.m_radius = radius;
+	circulo.m_p.Set(posX, posY);
+
 	b2FixtureDef f;
 	f.shape = &circulo;
 	f.density = density;
@@ -253,10 +276,21 @@ b2Vec2 Functions::ConvertScreenToWorld(GLFWwindow* window, int32 x, int32 y)
 	return p;
 }
 
-b2Body* Functions::createMainBubble()
+void Functions::createMainBubble()
 {
-	b2Body* bolaPrincipal = createCircle(getMouseWorld().x, getMouseWorld().y, 2.5, 1, 0.3, 0.5);
-	return bolaPrincipal;
+	getBolaAtiravel()->GetWorld()->DestroyBody(getBolaAtiravel());
+
+	b2Body* bolaAtiravel = createCircle(0, 20, 2.5, 0.2, 0.3, 0.5);
+	bolaAtiravel->SetGravityScale(9);
+	bolaAtiravel->SetUserData(new UserData);
+	setBolaAtiravel(bolaAtiravel);
+
+	std::this_thread::sleep_for(std::chrono::seconds(2));
+
+	b2Body* bolaAtiravelStatic = createStaticCircle(0, 20, 2.5, 0.2, 0.3, 0.5);
+	bolaAtiravelStatic->SetGravityScale(9);
+	bolaAtiravelStatic->SetUserData(new UserData);
+	setBolaAtiravel(bolaAtiravelStatic);
 }
 
 // Fun��o de Execu��o da Simula��o
@@ -289,8 +323,9 @@ bool Functions::JogarBolinhas() {
 		posX -= 3;
 	}
 
-	return true;
+	b2Body* bolaExtra = createCircle(getMouseWorld().x, getMouseWorld().y, 2.5, 1, 0.3, 0.5);
 
+	return true;
 }
 
 void Functions::desenharMira()
