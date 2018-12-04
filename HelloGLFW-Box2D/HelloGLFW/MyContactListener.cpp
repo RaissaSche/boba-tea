@@ -25,13 +25,14 @@ void MyContactListener::BeginContact(b2Contact * contact)
 		addId();
 	}
 
+	b2Body* body;
+
 	if (userDataA->getIsIgual() >= 3)
 	{
-		//for (b = contactWorldCopy->GetBodyList(); b; b = b->GetNext()) 
-		//{
-
-			//delete the balls???
-		//}
+		for (body = contactWorldCopy->GetBodyList(); body; body = body->GetNext())
+		{
+			body->GetWorld()->DestroyBody(body);
+		}
 	}
 }
 
